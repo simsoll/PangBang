@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B0BAE880-88DB-4F5D-B297-916639709A36}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PangBang</RootNamespace>
+    <AssemblyName>PangBang</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\WindowsGL\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\WindowsGL\Release\</OutputPath>
+    <DefineConstants>TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Draw\IDrawer.cs" />
+    <Compile Include="Draw\Drawer.cs" />
+    <Compile Include="Input\Keyboard\KeyboardManager.cs" />
+    <Compile Include="Input\Keyboard\Messages\KeyHeld.cs" />
+    <Compile Include="Input\Keyboard\Messages\KeyPressed.cs" />
+    <Compile Include="Input\Keyboard\Messages\KeyReleased.cs" />
+    <Compile Include="Input\PlayerInput.cs" />
+    <Compile Include="Particle\IParticle.cs" />
+    <Compile Include="Particle\IParticleManager.cs" />
+    <Compile Include="Particle\Particle.cs" />
+    <Compile Include="Particle\ParticleManager.cs" />
+    <Compile Include="Randomizer\IRandomizer.cs" />
+    <Compile Include="Randomizer\Randomizer.cs" />
+    <Compile Include="Rectangle\IRectangle.cs" />
+    <Compile Include="Rectangle\Rectangle.cs" />
+    <Compile Include="Screen\GameScreen.cs" />
+    <Compile Include="Screen\Messages\StartGame.cs" />
+    <Compile Include="Screen\StartScreen.cs" />
+    <Compile Include="Text\ITextDrawer.cs" />
+    <Compile Include="Text\PixelTextMap.cs" />
+    <Compile Include="Text\PixelTextDrawer.cs" />
+    <Compile Include="Messaging\Caliburn.Micro\EventAggregator.cs" />
+    <Compile Include="Messaging\Caliburn.Micro\ExtensionMethods.cs" />
+    <Compile Include="PangBang.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Screen\IScreen.cs" />
+    <Compile Include="Screen\IScreenFactory.cs" />
+    <Compile Include="Screen\ScreenFactory.cs" />
+    <Compile Include="Screen\ScreenManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="OpenTK">
+      <HintPath>$(MSBuildExtensionsPath)\..\MonoGame\v3.0\Assemblies\WindowsGL\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoGame.Framework">
+      <HintPath>$(MSBuildExtensionsPath)\..\MonoGame\v3.0\Assemblies\WindowsGL\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Lidgren.Network">
+      <HintPath>$(MSBuildExtensionsPath)\..\MonoGame\v3.0\Assemblies\WindowsGL\Lidgren.Network.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.Sdl">
+      <HintPath>$(MSBuildExtensionsPath)\..\MonoGame\v3.0\Assemblies\WindowsGL\Tao.Sdl.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Icon.ico" />
+    <Content Include="SDL.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\" />
+    <Folder Include="Input\Messages\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
