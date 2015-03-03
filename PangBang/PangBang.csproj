@@ -42,6 +42,10 @@
     <Compile Include="Input\Keyboard\Messages\KeyPressed.cs" />
     <Compile Include="Input\Keyboard\Messages\KeyReleased.cs" />
     <Compile Include="Input\PlayerInput.cs" />
+    <Compile Include="Level\ILevel.cs" />
+    <Compile Include="Level\ILevelFactory.cs" />
+    <Compile Include="Level\ILevelManager.cs" />
+    <Compile Include="Level\LevelManager.cs" />
     <Compile Include="Particle\IParticle.cs" />
     <Compile Include="Particle\IParticleManager.cs" />
     <Compile Include="Particle\Particle.cs" />
