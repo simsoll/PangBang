@@ -50,6 +50,11 @@ namespace PangBang.Level
                     _drawer.Draw(rectangle, circle.Color, 0.0f);
                 }
             }
+
+            foreach (var wall in _level.Walls)
+            {
+                _drawer.Draw(wall.Boundings, wall.Color, 0.0f);
+            }
         }
     }
 }

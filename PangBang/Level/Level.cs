@@ -11,17 +11,15 @@ namespace PangBang.Level
         private readonly IEventAggregator _eventAggregator;
 
         public string Name { get { return "Level 1"; } }
+        public IEnumerable<IWall> Walls { get; private set; } 
         public IEnumerable<ICircle> Circles { get; private set; }
 
 
-        public Level(IEventAggregator eventAggregator)
+        public Level(IEventAggregator eventAggregator, IEnumerable<IWall> walls, IEnumerable<ICircle> circles)
         {
             _eventAggregator = eventAggregator;
-
-            Circles = new List<ICircle>
-            {
-                new Circle(new Vector2(100.0f, 100.0f), 75.0f, 30.0f, 10.0f, Color.Black)
-            };
+            Walls = walls;
+            Circles = circles;
         }
 
         public void Load()

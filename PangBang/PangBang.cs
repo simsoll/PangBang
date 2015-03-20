@@ -78,7 +78,7 @@ namespace PangBang
             var drawer = new Drawer(_spriteBatch ,texture);
             var pixelTextDrawer = new PixelTextDrawer(textDrawer);
 
-            var levelFactory = new LevelFactory(_eventAggregator);
+            var levelFactory = new LevelFactory(_eventAggregator, _screenConfiguration, _levelConfiguration);
             var levelManager = new LevelManager(_eventAggregator, levelFactory, drawer);
 
             var screenFactory = new ScreenFactory(_eventAggregator, pixelTextDrawer, levelManager);

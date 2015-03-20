@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using PangBang.Configuration;
 
 #endregion
@@ -21,8 +22,9 @@ namespace PangBang
         static void Main()
         {
             var screenConfiguration = new ScreenConfiguration(800, 480);
+            var levelConfiguration = new LevelConfiguration(5.0f, Color.Black, 10.0f, 50.0f, Color.Black);
 
-            using (var game = new PangBang(screenConfiguration))
+            using (var game = new PangBang(screenConfiguration, levelConfiguration))
                 game.Run();
         }
     }
