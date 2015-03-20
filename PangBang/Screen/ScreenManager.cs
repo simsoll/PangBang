@@ -12,11 +12,11 @@ namespace PangBang.Screen
 
         private IScreen _currentScreen;
 
-        public ScreenManager(IEventAggregator eventAggregator, IScreen startScreen, IScreen gameScreen)
+        public ScreenManager(IEventAggregator eventAggregator, IScreenFactory screenFactory)
         {
             _eventAggregator = eventAggregator;
-            _startScreen = startScreen;
-            _gameScreen = gameScreen;
+            _startScreen = screenFactory.CreateStartScreen();
+            _gameScreen = screenFactory.CreateGameScreen();
 
             _currentScreen = _startScreen;
             LoadScreen(_startScreen);
@@ -42,7 +42,7 @@ namespace PangBang.Screen
             _eventAggregator.Unsubscribe(this);
         }
 
-        public void LoadScreen(IScreen screen)
+        private void LoadScreen(IScreen screen)
         {
             _currentScreen.Unload();
             _currentScreen = screen;

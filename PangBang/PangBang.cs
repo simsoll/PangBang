@@ -7,6 +7,15 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
+using PangBang.Draw;
+using PangBang.Entities;
+using PangBang.Input;
+using PangBang.Input.Keyboard;
+using PangBang.Level;
+using PangBang.Messaging.Caliburn.Micro;
+using PangBang.Screen;
+using PangBang.Text;
+
 #endregion
 
 namespace PangBang
@@ -16,13 +25,17 @@ namespace PangBang
     /// </summary>
     public class PangBang : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+        private IEventAggregator _eventAggregator;
+        private ScreenManager _screenManager;
+        private KeyboardManager _keyboardManager;
+        private PlayerInputManager _playerInputManager;
 
         public PangBang()
             : base()
         {
-            graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -35,8 +48,6 @@ namespace PangBang
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             base.Initialize();
         }
 
@@ -47,9 +58,27 @@ namespace PangBang
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _eventAggregator = new EventAggregator();
 
-            // TODO: use this.Content to load your game content here
+            var textTexture = GetPlain2DTexture(2);
+            var texture = GetPlain2DTexture(1);
+            var textDrawer = new Drawer(_spriteBatch, textTexture);
+            var drawer = new Drawer(_spriteBatch ,texture);
+            var pixelTextDrawer = new PixelTextDrawer(textDrawer);
+
+            var levelFactory = new LevelFactory(_eventAggregator);
+            var levelManager = new LevelManager(_eventAggregator, levelFactory, drawer);
+
+            var screenFactory = new ScreenFactory(_eventAggregator, pixelTextDrawer, levelManager);
+            _screenManager = new ScreenManager(_eventAggregator, screenFactory);
+            _screenManager.Load();
+
+            _keyboardManager = new KeyboardManager(_eventAggregator, TimeSpan.FromMilliseconds(500));
+            _keyboardManager.Load();
+
+            _playerInputManager = new PlayerInputManager(_eventAggregator);
+            _playerInputManager.Load();
         }
 
         /// <summary>
@@ -58,7 +87,9 @@ namespace PangBang
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+            _playerInputManager.Unload();
+            _keyboardManager.Unload();
+            _screenManager.Unload();
         }
 
         /// <summary>
@@ -71,7 +102,8 @@ namespace PangBang
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            _screenManager.Update(gameTime);
+            _keyboardManager.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -83,10 +115,25 @@ namespace PangBang
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.LightGray);
+            _spriteBatch.Begin();
 
-            // TODO: Add your drawing code here
+            _screenManager.Draw();
 
+            _spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        private Texture2D GetPlain2DTexture(int textureSize)
+        {
+            var texture = new Texture2D(GraphicsDevice, textureSize, textureSize);
+            var color = new Color[textureSize * textureSize];
+            for (var i = 0; i < color.Length; i++)
+            {
+                color[i] = Color.White;
+            }
+            texture.SetData(color);
+
+            return texture;
         }
     }
 }

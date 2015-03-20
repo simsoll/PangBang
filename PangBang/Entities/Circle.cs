@@ -23,6 +23,7 @@ namespace PangBang.Entities
             Radius = radius;
             Density = density;
             Color = color;
+            Parts = new List<IRectangle>();
 
             InitializeCircleLine(borderThickness);
         }

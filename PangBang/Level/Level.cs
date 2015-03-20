@@ -20,7 +20,7 @@ namespace PangBang.Level
 
             Circles = new List<ICircle>
             {
-                new Circle(new Vector2(100.0f, 100.0f), 50.0f, 10.0f, 10.0f, Color.Black)
+                new Circle(new Vector2(100.0f, 100.0f), 75.0f, 30.0f, 10.0f, Color.Black)
             };
         }
 
