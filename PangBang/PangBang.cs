@@ -32,12 +32,14 @@ namespace PangBang
         private ScreenManager _screenManager;
         private KeyboardManager _keyboardManager;
         private PlayerInputManager _playerInputManager;
-        private IScreenConfiguration _screenConfiguration;
+        private readonly IScreenConfiguration _screenConfiguration;
+        private readonly ILevelConfiguration _levelConfiguration;
 
-        public PangBang(IScreenConfiguration screenConfiguration)
+        public PangBang(IScreenConfiguration screenConfiguration, ILevelConfiguration levelConfiguration)
             : base()
         {
             _screenConfiguration = screenConfiguration;
+            _levelConfiguration = levelConfiguration;
             _graphics = new GraphicsDeviceManager(this)
             {
                 PreferredBackBufferWidth = _screenConfiguration.Width,

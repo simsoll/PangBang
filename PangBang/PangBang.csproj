@@ -36,7 +36,9 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ILevelConfiguration.cs" />
     <Compile Include="Configuration\IScreenConfiguration.cs" />
+    <Compile Include="Configuration\LevelConfiguration.cs" />
     <Compile Include="Configuration\ScreenConfiguration.cs" />
     <Compile Include="Draw\IDrawer.cs" />
     <Compile Include="Draw\Drawer.cs" />
