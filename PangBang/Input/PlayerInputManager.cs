@@ -4,11 +4,11 @@ using PangBang.Messaging.Caliburn.Micro;
 
 namespace PangBang.Input
 {
-    public class PlayerInput : IHandle<KeyPressed>, IHandle<KeyHeld>
+    public class PlayerInputManager : IHandle<KeyPressed>, IHandle<KeyHeld>
     {
         private readonly IEventAggregator _eventAggregator;
 
-        public PlayerInput(IEventAggregator eventAggregator)
+        public PlayerInputManager(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
         }
