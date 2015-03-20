@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PangBang.Configuration;
+
 #endregion
 
 namespace PangBang
@@ -18,7 +20,9 @@ namespace PangBang
         [STAThread]
         static void Main()
         {
-            using (var game = new PangBang())
+            var screenConfiguration = new ScreenConfiguration(800, 480);
+
+            using (var game = new PangBang(screenConfiguration))
                 game.Run();
         }
     }

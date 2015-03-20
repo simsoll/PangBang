@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
+using PangBang.Configuration;
 using PangBang.Draw;
 using PangBang.Entities;
 using PangBang.Input;
@@ -31,13 +32,21 @@ namespace PangBang
         private ScreenManager _screenManager;
         private KeyboardManager _keyboardManager;
         private PlayerInputManager _playerInputManager;
+        private IScreenConfiguration _screenConfiguration;
 
-        public PangBang()
+        public PangBang(IScreenConfiguration screenConfiguration)
             : base()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            _screenConfiguration = screenConfiguration;
+            _graphics = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferWidth = _screenConfiguration.Width,
+                PreferredBackBufferHeight = _screenConfiguration.Height
+            };
+
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
         }
 
         /// <summary>

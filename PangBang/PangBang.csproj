@@ -36,6 +36,8 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Configuration\IScreenConfiguration.cs" />
+    <Compile Include="Configuration\ScreenConfiguration.cs" />
     <Compile Include="Draw\IDrawer.cs" />
     <Compile Include="Draw\Drawer.cs" />
     <Compile Include="Entities\Circle.cs" />
