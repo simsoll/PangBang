@@ -43,7 +43,13 @@ namespace PangBang.Level
 
         public void Draw()
         {
-            throw new NotImplementedException();
+            foreach (var circle in _level.Circles)
+            {
+                foreach (var rectangle in circle.Parts)
+                {
+                    _drawer.Draw(rectangle, circle.Color, 0.0f);
+                }
+            }
         }
     }
 }

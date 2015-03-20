@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -37,6 +38,8 @@
   <ItemGroup>
     <Compile Include="Draw\IDrawer.cs" />
     <Compile Include="Draw\Drawer.cs" />
+    <Compile Include="Entities\Circle.cs" />
+    <Compile Include="Entities\ICircle.cs" />
     <Compile Include="Input\Keyboard\KeyboardManager.cs" />
     <Compile Include="Input\Keyboard\Messages\KeyHeld.cs" />
     <Compile Include="Input\Keyboard\Messages\KeyPressed.cs" />
@@ -45,6 +48,8 @@
     <Compile Include="Level\ILevel.cs" />
     <Compile Include="Level\ILevelFactory.cs" />
     <Compile Include="Level\ILevelManager.cs" />
+    <Compile Include="Level\Level.cs" />
+    <Compile Include="Level\LevelFactory.cs" />
     <Compile Include="Level\LevelManager.cs" />
     <Compile Include="Particle\IParticle.cs" />
     <Compile Include="Particle\IParticleManager.cs" />

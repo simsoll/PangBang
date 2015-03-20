@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using PangBang.Entities;
 
 namespace PangBang.Level
 {
@@ -8,5 +10,7 @@ namespace PangBang.Level
         void Load();
         void Unload();
         void Update(GameTime gameTime);
+
+        IEnumerable<ICircle> Circles { get; }
     }
 }
