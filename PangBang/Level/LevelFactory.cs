@@ -24,9 +24,9 @@ namespace PangBang.Level
             var walls = CreateWalls(_screenConfiguration.Width, _screenConfiguration.Height,
                 _levelConfiguration.WallThickness, _levelConfiguration.WallColor);
 
-            var circles = CreateCircles(_levelConfiguration.CircleLineThickness);
+            var balls = CreateBalls(_levelConfiguration.BallLineThickness, _levelConfiguration.BallColor);
 
-            return new Level(_eventAggregator, walls, circles);
+            return new Level(_eventAggregator, walls, balls);
         }
 
         private IEnumerable<IWall> CreateWalls(int screenWidth, int screenHeight, float thickness, Color color)
@@ -40,11 +40,11 @@ namespace PangBang.Level
             };
         }
 
-        private IEnumerable<ICircle> CreateCircles(float thickness)
+        private IEnumerable<IBall> CreateBalls(float thickness, Color color)
         {
-            return new List<ICircle>
+            return new List<IBall>
             {
-                new Circle(new Vector2(100.0f, 100.0f), 75.0f, 30.0f, 10.0f, Color.Black)
+                new Ball(new Vector2(100.0f, 100.0f), Vector2.Zero, 80.0f, thickness, color)
             };
         }
     }

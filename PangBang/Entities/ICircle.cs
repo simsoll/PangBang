@@ -8,6 +8,9 @@ namespace PangBang.Entities
     {
         Color Color { get; }
         Vector2 Velocity { get; set; }
+        float Radius { get; }
         IList<IRectangle> Parts { get; }
+
+        void Update(Vector2 center);
     }
 }

@@ -7,6 +7,56 @@ using PangBang.Rectangle;
 
 namespace PangBang.Entities
 {
+    public class Ball : IBall
+    {
+        public Ball(Vector2 center, Vector2 velocity, float radius, float boarderThickness, Color color)
+        {
+            Velocity = velocity;
+            Center = center;
+            Circles = InitializeLayers(radius, boarderThickness, color);
+        }
+
+        private IList<ICircle> InitializeLayers(float radius, float boarderThickness, Color color)
+        {
+            var returnResult = new List<ICircle>
+            {
+                new Circle(Center, radius, radius / 2.0f, boarderThickness, color),
+                new Circle(Center, radius/2.0f, radius / 2.0f / 2.0f, boarderThickness, color),
+                new Circle(Center, 0, 1, boarderThickness, color)
+            };
+
+            return returnResult;
+        }
+
+        public IList<ICircle> Circles { get; private set; }
+        public Vector2 Center { get; private set; }
+        public Vector2 Velocity { get; private set; }
+
+        public float Radius
+        {
+            get { return Circles.Max(x => x.Radius); }
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            Center += Velocity*elapsed;
+
+        }
+    }
+
+    public interface IBall
+    {
+        IList<ICircle> Circles { get; }
+        Vector2 Center { get; }
+        Vector2 Velocity { get; }
+        float Radius { get; }
+
+        void Update(GameTime gameTime);
+    }
+
+
     public class Circle : ICircle
     {
         public Vector2 Center { get; set; }
@@ -44,6 +94,11 @@ namespace PangBang.Entities
                 Parts.Add(new Rectangle.Rectangle(position.X - borderThickness/2.0f, position.Y - borderThickness/2.0f,
                     borderThickness, borderThickness));
             }
+        }
+        
+        public void Update(Vector2 center)
+        {
+            throw new NotImplementedException();
         }
     }
 }

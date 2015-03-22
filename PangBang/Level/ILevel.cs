@@ -12,6 +12,6 @@ namespace PangBang.Level
         void Update(GameTime gameTime);
 
         IEnumerable<IWall> Walls { get; }
-        IEnumerable<ICircle> Circles { get; }
+        IEnumerable<IBall> Balls { get; }
     }
 }

@@ -12,14 +12,14 @@ namespace PangBang.Level
 
         public string Name { get { return "Level 1"; } }
         public IEnumerable<IWall> Walls { get; private set; } 
-        public IEnumerable<ICircle> Circles { get; private set; }
+        public IEnumerable<IBall> Balls { get; private set; }
 
 
-        public Level(IEventAggregator eventAggregator, IEnumerable<IWall> walls, IEnumerable<ICircle> circles)
+        public Level(IEventAggregator eventAggregator, IEnumerable<IWall> walls, IEnumerable<IBall> balls)
         {
             _eventAggregator = eventAggregator;
             Walls = walls;
-            Circles = circles;
+            Balls = balls;
         }
 
         public void Load()

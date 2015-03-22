@@ -7,8 +7,8 @@ namespace PangBang.Configuration
         float WallThickness { get; }
         Color WallColor { get; }
 
-        float CircleLineThickness { get; }
-        float CircleSpeed { get; }
-        Color CircleColor { get; }
+        float BallLineThickness { get; }
+        float BallSpeed { get; }
+        Color BallColor { get; }
     }
 }
