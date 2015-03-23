@@ -1,62 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using PangBang.Rectangle;
 
 namespace PangBang.Entities
 {
-    public class Ball : IBall
-    {
-        public Ball(Vector2 center, Vector2 velocity, float radius, float boarderThickness, Color color)
-        {
-            Velocity = velocity;
-            Center = center;
-            Circles = InitializeLayers(radius, boarderThickness, color);
-        }
-
-        private IList<ICircle> InitializeLayers(float radius, float boarderThickness, Color color)
-        {
-            var returnResult = new List<ICircle>
-            {
-                new Circle(Center, radius, radius / 2.0f, boarderThickness, color),
-                new Circle(Center, radius/2.0f, radius / 2.0f / 2.0f, boarderThickness, color),
-                new Circle(Center, 0, 1, boarderThickness, color)
-            };
-
-            return returnResult;
-        }
-
-        public IList<ICircle> Circles { get; private set; }
-        public Vector2 Center { get; private set; }
-        public Vector2 Velocity { get; private set; }
-
-        public float Radius
-        {
-            get { return Circles.Max(x => x.Radius); }
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            Center += Velocity*elapsed;
-
-        }
-    }
-
-    public interface IBall
-    {
-        IList<ICircle> Circles { get; }
-        Vector2 Center { get; }
-        Vector2 Velocity { get; }
-        float Radius { get; }
-
-        void Update(GameTime gameTime);
-    }
-
-
     public class Circle : ICircle
     {
         public Vector2 Center { get; set; }
@@ -64,41 +13,75 @@ namespace PangBang.Entities
         public Vector2 Velocity { get; set; }
         public float Radius { get; private set; }
         public float Density { get; private set; }
-        public float RotationVelocity { get; set; }
-        public IList<IRectangle> Parts { get; private set; }
+        public float RotationSpeed { get; set; }
+        public IList<Part> Parts { get; private set; }
 
-        public Circle(Vector2 center, float radius, float density, float borderThickness, Color color)
+        public Circle(Vector2 center, float radius, float density, float rotationSpeed, float borderThickness, Color color)
         {
             Center = center;
             Radius = radius;
             Density = density;
+            RotationSpeed = rotationSpeed;
             Color = color;
-            Parts = new List<IRectangle>();
+            Parts = new List<Part>();
 
             InitializeCircleLine(borderThickness);
         }
 
         private void InitializeCircleLine(float borderThickness)
         {
-            var angleInDegreesPerPart = 360 / Density;
+            var angleInDegreesPerPart = 360/Density;
 
             for (var angleInDegrees = angleInDegreesPerPart;
                 angleInDegrees <= 360;
                 angleInDegrees += angleInDegreesPerPart)
             {
-                var x = (float)Math.Round(Math.Cos(MathHelper.ToRadians(angleInDegrees)), 4);
-                var y = angleInDegrees > 180 ? -1 * (float)Math.Sqrt(1 - x * x) : (float)Math.Sqrt(1 - x * x);
+                var x = (float) Math.Cos(MathHelper.ToRadians(angleInDegrees));
+                var y = (float) Math.Sin(MathHelper.ToRadians(angleInDegrees));
 
-                var position = Center + new Vector2(x, y) * Radius;
+                var position = Center + new Vector2(x, y)*Radius;
 
-                Parts.Add(new Rectangle.Rectangle(position.X - borderThickness/2.0f, position.Y - borderThickness/2.0f,
-                    borderThickness, borderThickness));
+                Parts.Add(
+                    new Part(
+                        new Rectangle.Rectangle(position.X - borderThickness/2.0f, position.Y - borderThickness/2.0f,
+                            borderThickness, borderThickness), angleInDegrees));
             }
         }
-        
-        public void Update(Vector2 center)
+
+        public void Update(GameTime gameTime, Vector2 center)
         {
-            throw new NotImplementedException();
+            Center = center;
+            var deltaAngleInDegress = (float) (RotationSpeed*gameTime.ElapsedGameTime.TotalSeconds);
+
+            foreach (var part in Parts)
+            {
+                part.Update(Center, Radius, deltaAngleInDegress);
+            }
+
+        }
+
+        public class Part
+        {
+            public IRectangle Rectangle { get; set; }
+            public float AngleInDegrees { get; private set; }
+
+            public Part(IRectangle rectangle, float angleInDegrees)
+            {
+                Rectangle = rectangle;
+                AngleInDegrees = angleInDegrees;
+            }
+
+            public void Update(Vector2 center, float radius, float deltaAngleInDegrees)
+            {
+                AngleInDegrees += deltaAngleInDegrees;
+
+                var x = (float)Math.Cos(MathHelper.ToRadians(AngleInDegrees));
+                var y = (float)Math.Sin(MathHelper.ToRadians(AngleInDegrees));
+
+                var position = center + new Vector2(x, y) * radius;
+                var centeredPosition = new Vector2(position.X - Rectangle.Width/ 2.0f, position.Y - Rectangle.Height / 2.0f);
+                Rectangle.Position = centeredPosition;
+            }
         }
     }
 }

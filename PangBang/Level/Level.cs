@@ -34,6 +34,10 @@ namespace PangBang.Level
 
         public void Update(GameTime gameTime)
         {
+            foreach (var ball in Balls)
+            {
+                ball.Update(gameTime);
+            }
         }
     }
 }

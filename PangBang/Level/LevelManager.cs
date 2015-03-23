@@ -47,9 +47,9 @@ namespace PangBang.Level
             {
                 foreach (var circle in ball.Circles)
                 {
-                    foreach (var rectangle in circle.Parts)
+                    foreach (var part in circle.Parts)
                     {
-                        _drawer.Draw(rectangle, circle.Color, 0.0f);
+                        _drawer.Draw(part.Rectangle, circle.Color, 0.0f);
                     }    
                 }
             }

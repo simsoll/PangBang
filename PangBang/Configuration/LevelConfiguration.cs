@@ -8,19 +8,23 @@ namespace PangBang.Configuration
 {
     public class LevelConfiguration : ILevelConfiguration
     {
-        public LevelConfiguration(float wallThickness, Color wallColor, float ballLineThickness, float ballSpeed, Color ballColor)
+        public LevelConfiguration(Vector2 gravity, float wallThickness, Color wallColor, float ballRadius, float ballRotationSpeed, float ballLineThickness, Color ballColor)
         {
-            BallColor = ballColor;
+            Gravity = gravity;
             WallColor = wallColor;
             WallThickness = wallThickness;
+            BallRadius = ballRadius;
+            BallRotationSpeed = ballRotationSpeed;
             BallLineThickness = ballLineThickness;
-            BallSpeed = ballSpeed;
+            BallColor = ballColor;
         }
 
+        public Vector2 Gravity { get; private set; }
         public float WallThickness { get; private set; }
         public Color WallColor { get; private set; }
+        public float BallRadius { get; private set; }
+        public float BallRotationSpeed { get; private set; }
         public float BallLineThickness { get; private set; }
-        public float BallSpeed { get; private set; }
         public Color BallColor { get; private set; }
     }
 }

@@ -12,7 +12,8 @@ namespace PangBang.Level
         private readonly IScreenConfiguration _screenConfiguration;
         private readonly ILevelConfiguration _levelConfiguration;
 
-        public LevelFactory(IEventAggregator eventAggregator, IScreenConfiguration screenConfiguration, ILevelConfiguration levelConfiguration)
+        public LevelFactory(IEventAggregator eventAggregator, IScreenConfiguration screenConfiguration,
+            ILevelConfiguration levelConfiguration)
         {
             _eventAggregator = eventAggregator;
             _screenConfiguration = screenConfiguration;
@@ -24,7 +25,8 @@ namespace PangBang.Level
             var walls = CreateWalls(_screenConfiguration.Width, _screenConfiguration.Height,
                 _levelConfiguration.WallThickness, _levelConfiguration.WallColor);
 
-            var balls = CreateBalls(_levelConfiguration.BallLineThickness, _levelConfiguration.BallColor);
+            var balls = CreateBalls(_levelConfiguration.Gravity, _levelConfiguration.BallRadius, _levelConfiguration.BallRotationSpeed,
+                _levelConfiguration.BallLineThickness, _levelConfiguration.BallColor);
 
             return new Level(_eventAggregator, walls, balls);
         }
@@ -40,11 +42,11 @@ namespace PangBang.Level
             };
         }
 
-        private IEnumerable<IBall> CreateBalls(float thickness, Color color)
+        private IEnumerable<IBall> CreateBalls(Vector2 gravity, float radius, float rotationSpeed, float thickness, Color color)
         {
             return new List<IBall>
             {
-                new Ball(new Vector2(100.0f, 100.0f), Vector2.Zero, 80.0f, thickness, color)
+                new Ball(gravity, new Vector2(100.0f, 100.0f), Vector2.UnitX*75, radius, rotationSpeed, thickness, color)
             };
         }
     }

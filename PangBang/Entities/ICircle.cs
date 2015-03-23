@@ -9,8 +9,8 @@ namespace PangBang.Entities
         Color Color { get; }
         Vector2 Velocity { get; set; }
         float Radius { get; }
-        IList<IRectangle> Parts { get; }
+        IList<Circle.Part> Parts { get; }
 
-        void Update(Vector2 center);
+        void Update(GameTime gameTime, Vector2 center);
     }
 }
