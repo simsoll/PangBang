@@ -18,8 +18,9 @@ namespace PangBang.Entities
         {
             var returnResult = new List<ICircle>
             {
-                new Circle(Center, radius, radius / 2.0f, rotationSpeed, boarderThickness, color),
-                new Circle(Center, radius/2.0f, radius / 2.0f / 2.0f, - rotationSpeed, boarderThickness, color),
+                new Circle(Center, radius, radius / 2.5f, rotationSpeed, boarderThickness, color),
+                new Circle(Center, radius/1.5f, radius / 4.0f, - rotationSpeed, boarderThickness, color),
+                new Circle(Center, radius/3.0f, radius / 8.0f, rotationSpeed, boarderThickness, color),
                 new Circle(Center, 0, 1, 0, boarderThickness, color)
             };
 

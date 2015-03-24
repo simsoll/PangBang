@@ -22,7 +22,7 @@ namespace PangBang
         static void Main()
         {
             var screenConfiguration = new ScreenConfiguration(800, 480);
-            var levelConfiguration = new LevelConfiguration(new Vector2(0, 20),  5.0f, Color.Black, 80.0f, 50.0f, 10.0f, Color.Black);
+            var levelConfiguration = new LevelConfiguration(new Vector2(0, 20),  5.0f, Color.Black, 80.0f, 30.0f, 10.0f, Color.Black);
 
             using (var game = new PangBang(screenConfiguration, levelConfiguration))
                 game.Run();
