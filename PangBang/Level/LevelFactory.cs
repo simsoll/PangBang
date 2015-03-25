@@ -46,7 +46,7 @@ namespace PangBang.Level
         {
             return new List<IBall>
             {
-                new Ball(gravity, new Vector2(100.0f, 100.0f), Vector2.UnitX*75, radius, rotationSpeed, thickness, color)
+                new Ball(_eventAggregator, gravity, new Vector2(100.0f, 100.0f), Vector2.UnitX*75, radius, rotationSpeed, thickness, color)
             };
         }
     }

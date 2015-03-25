@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using PangBang.Entities;
+using PangBang.Level.Messages;
 using PangBang.Messaging.Caliburn.Micro;
 
 namespace PangBang.Level
@@ -25,10 +26,20 @@ namespace PangBang.Level
         public void Load()
         {
             _eventAggregator.Subscribe(this);
+
+            _eventAggregator.Publish(new LevelLoaded
+            {
+                Level = this
+            });
         }
 
         public void Unload()
         {
+            _eventAggregator.Publish(new LevelUnloaded
+            {
+                Level = this
+            });
+
             _eventAggregator.Unsubscribe(this);
         }
 

@@ -1,13 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using PangBang.Entities.Messages;
+using PangBang.Messaging.Caliburn.Micro;
 
 namespace PangBang.Entities
 {
     public class Ball : IBall
     {
-        public Ball(Vector2 gravity, Vector2 center, Vector2 velocity, float radius, float rotationSpeed, float boarderThickness, Color color)
+        public Ball(IEventAggregator eventAggregator, Vector2 gravity, Vector2 center, Vector2 velocity, float radius, float rotationSpeed, float boarderThickness, Color color)
         {
+            _eventAggregator = eventAggregator;
             _gravity = gravity;
             Velocity = velocity;
             Center = center;
@@ -27,10 +30,11 @@ namespace PangBang.Entities
             return returnResult;
         }
 
+        private readonly IEventAggregator _eventAggregator;
         private Vector2 _gravity;
         public IList<ICircle> Circles { get; private set; }
-        public Vector2 Center { get; private set; }
-        public Vector2 Velocity { get; private set; }
+        public Vector2 Center { get; set; }
+        public Vector2 Velocity { get; set; }
 
         public float Radius
         {
@@ -47,6 +51,11 @@ namespace PangBang.Entities
             {
                 circle.Update(gameTime, Center);
             }
+
+            _eventAggregator.Publish(new BallMoved
+            {
+                Ball = this
+            });
         }
     }
 }

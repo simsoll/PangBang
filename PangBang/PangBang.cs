@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
+using PangBang.Collision;
 using PangBang.Configuration;
 using PangBang.Draw;
 using PangBang.Entities;
@@ -79,7 +80,8 @@ namespace PangBang
             var pixelTextDrawer = new PixelTextDrawer(textDrawer);
 
             var levelFactory = new LevelFactory(_eventAggregator, _screenConfiguration, _levelConfiguration);
-            var levelManager = new LevelManager(_eventAggregator, levelFactory, drawer);
+            var collisionManager = new CollisionManager(_eventAggregator);
+            var levelManager = new LevelManager(_eventAggregator, levelFactory, drawer, collisionManager);
 
             var screenFactory = new ScreenFactory(_eventAggregator, pixelTextDrawer, levelManager);
             _screenManager = new ScreenManager(_eventAggregator, screenFactory);

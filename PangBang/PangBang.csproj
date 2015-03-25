@@ -36,6 +36,8 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Collision\CollisionManager.cs" />
+    <Compile Include="Collision\ICollisionManager.cs" />
     <Compile Include="Configuration\ILevelConfiguration.cs" />
     <Compile Include="Configuration\IScreenConfiguration.cs" />
     <Compile Include="Configuration\LevelConfiguration.cs" />
@@ -47,6 +49,7 @@
     <Compile Include="Entities\IBall.cs" />
     <Compile Include="Entities\IWall.cs" />
     <Compile Include="Entities\ICircle.cs" />
+    <Compile Include="Entities\Messages\BallMoved.cs" />
     <Compile Include="Entities\Wall.cs" />
     <Compile Include="Input\Keyboard\KeyboardManager.cs" />
     <Compile Include="Input\Keyboard\Messages\KeyHeld.cs" />
@@ -59,6 +62,8 @@
     <Compile Include="Level\Level.cs" />
     <Compile Include="Level\LevelFactory.cs" />
     <Compile Include="Level\LevelManager.cs" />
+    <Compile Include="Level\Messages\LevelLoaded.cs" />
+    <Compile Include="Level\Messages\LevelUnloaded.cs" />
     <Compile Include="Particle\IParticle.cs" />
     <Compile Include="Particle\IParticleManager.cs" />
     <Compile Include="Particle\Particle.cs" />

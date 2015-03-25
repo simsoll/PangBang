@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using PangBang.Collision;
 using PangBang.Draw;
 using PangBang.Messaging.Caliburn.Micro;
 
@@ -13,13 +14,15 @@ namespace PangBang.Level
         private readonly IEventAggregator _eventAggregator;
         private readonly ILevelFactory _levelFactory;
         private readonly IDrawer _drawer;
+        private readonly ICollisionManager _collisionManager;
         private readonly ILevel _level;
 
-        public LevelManager(IEventAggregator eventAggregator, ILevelFactory levelFactory, IDrawer drawer)
+        public LevelManager(IEventAggregator eventAggregator, ILevelFactory levelFactory, IDrawer drawer, ICollisionManager collisionManager)
         {
             _eventAggregator = eventAggregator;
             _levelFactory = levelFactory;
             _drawer = drawer;
+            _collisionManager = collisionManager;
 
             _level = _levelFactory.CreateLevel();
         }
@@ -27,12 +30,14 @@ namespace PangBang.Level
         public void Load()
         {
             _eventAggregator.Subscribe(this);
+            _collisionManager.Load();
             _level.Load();
         }
 
         public void Unload()
         {
             _level.Unload();
+            _collisionManager.Unload();
             _eventAggregator.Unsubscribe(this);
         }
 
