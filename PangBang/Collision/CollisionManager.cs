@@ -61,37 +61,37 @@ namespace PangBang.Collision
         public void ResolveCollision(IBall ball, IBall otherBall)
         {
             // get the mtd
-            var delta = ball.Center - otherBall.Center;
-            var d = delta.Length();
+            var distance = ball.Center - otherBall.Center;
+            var distanceLength = distance.Length();
             // minimum translation distance to push balls apart after intersecting
-            var mtd = delta * (((ball.Radius + otherBall.Radius) - d) / d);
+            var minimumTranslationDistance = distance * (((ball.Radius + otherBall.Radius) - distanceLength) / distanceLength);
 
             // resolve intersection --
             // inverse mass quantities
             //float im1 = 1 / getMass();
             //float im2 = 1 / ball.getMass();
-            var im1 = 1;
-            var im2 = 1;
+            var inverseMassBall = 1;
+            var inverseMassOtherBall = 1;
 
             // push-pull them apart based off their mass
-            ball.Center += mtd * im1 / (im1 + im2);
-            otherBall.Center -= mtd * im2 / (im1 + im2);
+            ball.Center += minimumTranslationDistance * inverseMassBall / (inverseMassBall + inverseMassOtherBall);
+            otherBall.Center -= minimumTranslationDistance * inverseMassOtherBall / (inverseMassBall + inverseMassOtherBall);
 
             // impact speed
-            var v = ball.Velocity - otherBall.Velocity;
-            var vn = Vector2.Dot(v, Vector2.Normalize(mtd));
+            var velocityDifference = ball.Velocity - otherBall.Velocity;
+            var vn = Vector2.Dot(velocityDifference, Vector2.Normalize(minimumTranslationDistance));
 
             // sphere intersecting but moving away from each other already
             if (vn > 0.0f) return;
 
             // collision impulse
             var restitution = 1;
-            var i = (-(1.0f + restitution) * vn) / (im1 + im2);
-            var impulse = Vector2.Normalize(mtd) * i;
+            var i = (-(1.0f + restitution) * vn) / (inverseMassBall + inverseMassOtherBall);
+            var impulse = Vector2.Normalize(minimumTranslationDistance) * i;
 
             // change in momentum
-            ball.Velocity += impulse * im1;
-            otherBall.Velocity -= impulse * im2;
+            ball.Velocity += impulse * inverseMassBall;
+            otherBall.Velocity -= impulse * inverseMassOtherBall;
         }
 
         private void CheckForBallCollisionWithWalls(IBall ball, IEnumerable<IWall> walls)
