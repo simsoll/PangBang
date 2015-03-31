@@ -15,33 +15,105 @@ namespace PangBang.Collision
     {
         private readonly IEventAggregator _eventAggregator;
         private ILevel _level;
+        private readonly IList<IBall> _balls; //TODO: remove balls when they are destroyed
 
         public CollisionManager(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
+            _balls = new List<IBall>();
         }
 
         public void Handle(BallMoved message)
         {
+            if (!_balls.Contains(message.Ball))
+            {
+                _balls.Add(message.Ball);
+            }
+
             CheckForBallCollisionWithWalls(message.Ball, _level.Walls);
+            CheckForBallCollisionWithOtherBalls(message.Ball, _level.Balls.Except(new[] {message.Ball}));
+        }
+
+        private void CheckForBallCollisionWithOtherBalls(IBall ball, IEnumerable<IBall> otherBalls)
+        {
+            foreach (var otherball in otherBalls)
+            {
+                if (Colliding(ball, otherball))
+                {
+                    ResolveCollision(ball, otherball);
+                }
+            }
+        }
+
+        public bool Colliding(IBall ball, IBall otherBall)
+        {
+            var xd = ball.Center.X - otherBall.Center.X;
+            var yd = ball.Center.Y - otherBall.Center.Y;
+
+            var sumRadius = ball.Radius + otherBall.Radius;
+            var sqrRadius = sumRadius * sumRadius;
+
+            var distSqr = (xd * xd) + (yd * yd);
+
+            return distSqr <= sqrRadius;
+        }
+
+        public void ResolveCollision(IBall ball, IBall otherBall)
+        {
+            // get the mtd
+            var delta = ball.Center - otherBall.Center;
+            var d = delta.Length();
+            // minimum translation distance to push balls apart after intersecting
+            var mtd = delta * (((ball.Radius + otherBall.Radius) - d) / d);
+
+            // resolve intersection --
+            // inverse mass quantities
+            //float im1 = 1 / getMass();
+            //float im2 = 1 / ball.getMass();
+            var im1 = 1;
+            var im2 = 1;
+
+            // push-pull them apart based off their mass
+            ball.Center += mtd * im1 / (im1 + im2);
+            otherBall.Center -= mtd * im2 / (im1 + im2);
+
+            // impact speed
+            var v = ball.Velocity - otherBall.Velocity;
+            var vn = Vector2.Dot(v, Vector2.Normalize(mtd));
+
+            // sphere intersecting but moving away from each other already
+            if (vn > 0.0f) return;
+
+            // collision impulse
+            var restitution = 1;
+            var i = (-(1.0f + restitution) * vn) / (im1 + im2);
+            var impulse = Vector2.Normalize(mtd) * i;
+
+            // change in momentum
+            ball.Velocity += impulse * im1;
+            otherBall.Velocity -= impulse * im2;
         }
 
         private void CheckForBallCollisionWithWalls(IBall ball, IEnumerable<IWall> walls)
         {
-            var collistionSummury = GetCollisionSummary(ball, walls);
+            var collisionSummary = GetCollisionSummaryBetweenBallAndWall(ball, walls);
 
-            if (collistionSummury == null)
+            if (!collisionSummary.Any())
             {
                 return;
             }
 
-            var rectangle = collistionSummury.Part.Rectangle;
-            var rectangleLastFrame = new Rectangle.Rectangle(rectangle.X - ball.Velocity.X,
-                rectangle.Y - ball.Velocity.Y, rectangle.Width,
-                rectangle.Height);
+            var collisionPenetrations = new List<CollisionPenetration>();
 
-            var collisionPenetration = CollisionPenetration(collistionSummury.Wall.Boundings, rectangle,
-                rectangleLastFrame);
+            foreach (var tuple in collisionSummary)
+            {
+                var rectangleLastFrame = RectangleLastFrame(tuple.Item1.Rectangle, ball.Velocity);
+
+                collisionPenetrations.Add(CollisionPenetration(tuple.Item2.Boundings, tuple.Item1.Rectangle,
+                    rectangleLastFrame));
+            }
+
+            var collisionPenetration = collisionPenetrations.OrderByDescending(x => x.Depth.LengthSquared()).First();
 
             ball.Center -= collisionPenetration.Depth;
             switch (collisionPenetration.From)
@@ -57,24 +129,29 @@ namespace PangBang.Collision
             }
         }
 
-        private CollisionSummary GetCollisionSummary(IBall ball, IEnumerable<IWall> walls)
+        private IEnumerable<Tuple<Circle.Part, IWall>> GetCollisionSummaryBetweenBallAndWall(IBall ball, IEnumerable<IWall> walls)
         {
+            var result = new List<Tuple<Circle.Part, IWall>>();
+
             foreach (var wall in walls)
             {
                 foreach (var part in ball.Circles.OrderByDescending(c => c.Radius).First().Parts)
                 {
                     if (part.Rectangle.Intersects(wall.Boundings))
                     {
-                        return new CollisionSummary
-                        {
-                            Part = part,
-                            Wall = wall
-                        };
+                        result.Add(new Tuple<Circle.Part, IWall>(part, wall));
                     }
                 }
             }
 
-            return null;
+            return result;
+        }
+
+        private IRectangle RectangleLastFrame(IRectangle rectangle, Vector2 velocity)
+        {
+            return new Rectangle.Rectangle(rectangle.X - velocity.X,
+                rectangle.Y - velocity.Y, rectangle.Width,
+                rectangle.Height);
         }
 
         private CollisionPenetration CollisionPenetration(
@@ -157,12 +234,6 @@ namespace PangBang.Collision
     {
         public Vector2 Depth { get; set; }
         public Direction From { get; set; }
-    }
-
-    public class CollisionSummary
-    {
-        public IWall Wall { get; set; }
-        public Circle.Part Part { get; set; }
     }
 
     public enum Direction

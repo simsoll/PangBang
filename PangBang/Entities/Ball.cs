@@ -38,7 +38,7 @@ namespace PangBang.Entities
 
         public float Radius
         {
-            get { return Circles.Max(x => x.Radius); }
+            get { return Circles.Max(x => x.Radius) + Circles.First().Parts.First().Rectangle.Width / 2.0f; }
         }
 
         public void Update(GameTime gameTime)
